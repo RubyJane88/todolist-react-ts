@@ -1,0 +1,19 @@
+{
+  "my-list": [
+    {
+      "id": "76rfu",
+      "check": true,
+      "title": "Go to Storo"
+    },
+    {
+      "id": "76fi6dy",
+      "check": false,
+      "title": "Go to Domino"
+    },
+    {
+      "id": "123ead",
+      "check": false,
+      "title": "Kjorer noe banan"
+    }
+  ]
+}

@@ -1,36 +1,69 @@
 import React from "react";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Checkbox from "@material-ui/core/Checkbox";
+import { Button } from "@material-ui/core";
 
-const CheckboxTodo = () => {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedF: true,
-    checkedG: true,
-  });
+export default function CheckboxList() {
+  const classes = useStyles();
+  const [checked, setChecked] = React.useState([0]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
   };
 
   return (
-    <div>
-      <FormControlLabel
-        control={<Checkbox name="checkedC" />}
-        label="Add Item"
-      />
-    </div>
+    <List className={classes.root}>
+      {[0, 1, 2, 3].map((value) => {
+        const labelId = `checkbox-list-label-${value}`;
+
+        return (
+          <ListItem
+            key={value}
+            role={undefined}
+            dense
+            button
+            onClick={handleToggle(value)}
+          >
+            <ListItemIcon>
+              <Checkbox
+                edge="start"
+                checked={checked.indexOf(value) !== -1}
+                tabIndex={-1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+          </ListItem>
+        );
+      })}
+
+      <Button onClick={() => alert("add item")} style={{ marginTop: "10px" }}>
+        Add Item...
+      </Button>
+    </List>
   );
-};
+}
 
-export default CheckboxTodo;
-
-// const GreenCheckbox = withStyles({
-//     root: {
-//         color: green[400],
-//         '&$checked': {
-//             color: green[600],
-//         },
-//     },
-//     checked: {},
-// })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: "100%",
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper,
+    },
+  })
+);
